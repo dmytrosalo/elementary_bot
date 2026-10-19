@@ -1,0 +1,28 @@
+[Unit]
+Description=VATRA stock bot (Telegram <- Elementary POS)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# DynamicUser: процес має власний тимчасовий uid і не володіє жодним файлом,
+# тож помилка тут не дістане ні вебрут, ні конфіг Caddy. Той самий підхід,
+# що у vatra-subscribe поруч.
+DynamicUser=yes
+EnvironmentFile=/etc/elementary-bot.env
+ExecStart=/usr/bin/python3 /opt/vatra/elementary-bot/bot.py
+Restart=always
+RestartSec=5s
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+MemoryMax=128M
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target
